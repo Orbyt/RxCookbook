@@ -33,9 +33,38 @@
 
 <p>This page aims to provide real world examples of the usage of RxJava/RxAndroid. Currently most samples are RxJava and RxAndroid. Feel free to submit a pull request for other samples.</p>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">void</span> getStuff() {
-   <span class="pl-k">return</span> stuff;
-}</pre></div>
+<h4>
+<a id="polling-an-api-with-retrofit" class="anchor" href="#polling-an-api-with-retrofit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Polling an API with Retrofit</h4>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">//Retrofit interface in MyRetrofitService.java</span>
+@<span class="pl-c1">GET</span>(<span class="pl-s"><span class="pl-pds">"</span>/locations<span class="pl-pds">"</span></span>)
+<span class="pl-k">Observable&lt;<span class="pl-smi">MyResponse</span>&gt;</span> getLocation();</pre></div>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Retrofit</span> retrofit <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Retrofit</span>.<span class="pl-smi">Builder</span>()
+                .baseUrl(<span class="pl-s"><span class="pl-pds">"</span>http://example.com<span class="pl-pds">"</span></span>)
+                .addCallAdapterFactory(<span class="pl-smi">RxJavaCallAdapterFactory</span><span class="pl-k">.</span>create())
+                .addConverterFactory(<span class="pl-smi">GsonConverterFactory</span><span class="pl-k">.</span>create())
+                .build();</pre></div>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">MyRetrofitService</span> retrofitService <span class="pl-k">=</span> retrofit<span class="pl-k">.</span>create(<span class="pl-smi">MyRetrofitService</span><span class="pl-k">.</span>class);</pre></div>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Observable</span><span class="pl-k">.</span>interval(<span class="pl-c1">3000</span>, <span class="pl-smi">TimeUnit</span><span class="pl-c1"><span class="pl-k">.</span>MILLISECONDS</span>)
+                .flatMap(param <span class="pl-k">-</span><span class="pl-k">&gt;</span> retrofitService<span class="pl-k">.</span>getLocation())
+                .subscribeOn(<span class="pl-smi">Schedulers</span><span class="pl-k">.</span>io())
+                .observeOn(<span class="pl-smi">AndroidSchedulers</span><span class="pl-k">.</span>mainThread())
+                .subscribe(<span class="pl-k">new</span> <span class="pl-k">Subscriber&lt;<span class="pl-smi">MyResponse</span>&gt;</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onCompleted</span>() {
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>rx comleted<span class="pl-pds">"</span></span>);
+                    }
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">Throwable</span> <span class="pl-v">e</span>) {
+                    }
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onNext</span>(<span class="pl-smi">MyResponse</span> <span class="pl-v">myResponse</span>) {
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>response: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> myResponse<span class="pl-k">.</span>getSomeField());
+                    }
+                });</pre></div>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/Orbyt">Orbyt</a></p>
