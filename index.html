@@ -36,9 +36,11 @@
 <h4>
 <a id="polling-an-api-with-retrofit" class="anchor" href="#polling-an-api-with-retrofit" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Polling an API with Retrofit</h4>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-c">//Retrofit interface in MyRetrofitService.java</span>
-@<span class="pl-c1">GET</span>(<span class="pl-s"><span class="pl-pds">"</span>/locations<span class="pl-pds">"</span></span>)
-<span class="pl-k">Observable&lt;<span class="pl-smi">MyResponse</span>&gt;</span> getLocation();</pre></div>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">MyRetrofitService</span> {
+
+    <span class="pl-k">@GET</span>(<span class="pl-s"><span class="pl-pds">"</span>/locations<span class="pl-pds">"</span></span>)
+    <span class="pl-k">Observable&lt;<span class="pl-smi">MyResponse</span>&gt;</span> <span class="pl-en">getLocation</span>();
+}</pre></div>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">Retrofit</span> retrofit <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Retrofit</span>.<span class="pl-smi">Builder</span>()
                 .baseUrl(<span class="pl-s"><span class="pl-pds">"</span>http://example.com<span class="pl-pds">"</span></span>)
