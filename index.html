@@ -39,7 +39,7 @@
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">MyRetrofitService</span> {
 
     <span class="pl-k">@GET</span>(<span class="pl-s"><span class="pl-pds">"</span>/locations<span class="pl-pds">"</span></span>)
-    <span class="pl-k">Observable&lt;<span class="pl-smi">MyResponse</span>&gt;</span> <span class="pl-en">getLocation</span>();
+    <span class="pl-k">Observable&lt;<span class="pl-smi">Location</span>&gt;</span> <span class="pl-en">getLocation</span>();
 }</pre></div>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">Retrofit</span> retrofit <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Retrofit</span>.<span class="pl-smi">Builder</span>()
@@ -54,7 +54,7 @@
                 .flatMap(param <span class="pl-k">-</span><span class="pl-k">&gt;</span> retrofitService<span class="pl-k">.</span>getLocation())
                 .subscribeOn(<span class="pl-smi">Schedulers</span><span class="pl-k">.</span>io())
                 .observeOn(<span class="pl-smi">AndroidSchedulers</span><span class="pl-k">.</span>mainThread())
-                .subscribe(<span class="pl-k">new</span> <span class="pl-k">Subscriber&lt;<span class="pl-smi">MyResponse</span>&gt;</span>() {
+                .subscribe(<span class="pl-k">new</span> <span class="pl-k">Subscriber&lt;<span class="pl-smi">Location</span>&gt;</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onCompleted</span>() {
                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>rx comleted<span class="pl-pds">"</span></span>);
@@ -63,8 +63,8 @@
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">Throwable</span> <span class="pl-v">e</span>) {
                     }
                     <span class="pl-k">@Override</span>
-                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onNext</span>(<span class="pl-smi">MyResponse</span> <span class="pl-v">myResponse</span>) {
-                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>response: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> myResponse<span class="pl-k">.</span>getSomeField());
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onNext</span>(<span class="pl-smi">Location</span> <span class="pl-v">location</span>) {
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>api<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>response: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> location<span class="pl-k">.</span>getSomeField());
                     }
                 });</pre></div>
       </section>
